@@ -1,0 +1,10 @@
+https://github.com/reliese/laravel
+https://github.com/kitloong/laravel-migrations-generator
+
+https://github.com/Nafezly/payments
+https://docs.laravel-excel.com/3.1/getting-started/installation.html#requirements
+
+https://spatie.be/docs/laravel-translatable/v6/installation-setup
+https://github.com/spatie/laravel-permission
+
+
