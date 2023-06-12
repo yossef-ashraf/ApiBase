@@ -1863,16 +1863,16 @@
         },
         {
             "name": "nafezly/payments",
-            "version": "v2.4.27",
+            "version": "v2.4.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nafezly/payments.git",
-                "reference": "4cf3aef39fd58989c6e068295fd7e8e8cc14efff"
+                "reference": "7a6150e3af43979a2f07d5d5691ad80e72ded472"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nafezly/payments/zipball/4cf3aef39fd58989c6e068295fd7e8e8cc14efff",
-                "reference": "4cf3aef39fd58989c6e068295fd7e8e8cc14efff",
+                "url": "https://api.github.com/repos/Nafezly/payments/zipball/7a6150e3af43979a2f07d5d5691ad80e72ded472",
+                "reference": "7a6150e3af43979a2f07d5d5691ad80e72ded472",
                 "shasum": ""
             },
             "require": {
@@ -1919,9 +1919,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Nafezly/payments/issues",
-                "source": "https://github.com/Nafezly/payments/tree/v2.4.27"
+                "source": "https://github.com/Nafezly/payments/tree/v2.4.28"
             },
-            "time": "2023-04-16T23:52:57+00:00"
+            "time": "2023-05-30T15:27:14+00:00"
         },
         {
             "name": "nesbot/carbon",
