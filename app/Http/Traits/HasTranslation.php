@@ -12,7 +12,7 @@ trait HasTranslation
         // use HasTranslation;
     //     public $translatable = ['name'];
     // }
-    
+
     public function toArray()
     {
         $attributes = parent::toArray();

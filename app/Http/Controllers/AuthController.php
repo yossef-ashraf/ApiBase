@@ -54,23 +54,23 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $validations = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required',
+        ]);
 
-        // if (Auth::guard('api')->attempt($credentials)) {
-            $user = User::where('email', $request->email)->first();
-
-            if (! $user || ! Hash::check($request->password, $user->password)) {
-                throw ValidationException::withMessages([
-                    'email' => ['The provided credentials are incorrect.'],
-                ]);
-            }
-
-        // if (Auth::attempt($credentials)) {
-             $token = $user->createToken('API Token')->plainTextToken;
-            return response()->json(['token' => $token], 200);
-        // } else {
-        //     return response()->json(['message' => 'Invalid credentials'], 401);
-        // }
+        if ($validations->fails()) {
+            return $this->apiResponse(400, 'validation error', $validations->errors());
+        }
+        $user = User::where('email', $request->email)->first();
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            $validations= ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+            return $this->apiResponse(400, 'validation error', $validations);
+        }
+            $token = $user->createToken('API Token')->plainTextToken;
+            return $this->apiResponse(200, 'Successfully', null,$token);
     }
 
     /**
@@ -81,8 +81,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-
-        return response()->json(['message' => 'Logged out successfully'], 200);
+        return $this->apiResponse(200, 'Successfully');
     }
 
     /**
@@ -92,7 +91,32 @@ class AuthController extends Controller
      */
     public function me(Request $request)
     {
-        return response()->json($request->user());
+        return $this->apiResponse(200, 'Successfully', null,response()->json($request->user()));
+    }
+
+        /**
+     * Reset the user's password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function resetPassword(Request $request)
+    {
+        $validations = Validator::make($request->all(), [
+            'password' => ['required', 'min:8'],
+            'new_password' => ['required', 'min:8'],
+            'confirm_password' => "required|same:new_password",
+        ]);
+
+        if ($validations->fails()) {
+            return $this->apiResponse(400, 'validation error', $validations->errors());
+        }
+
+        $user = User::where('id', auth()->user()->id)->first();
+        if ($user && Hash::check($request->password, $request->user()->password)) {
+            $user->update(['password' => Hash::make($request->confirm_password)]);
+            return $this->apiResponse(200, 'Successfully', null,$user);
+        }
+        return $this->apiResponse(200, 'Successfully');
     }
 
      /**
@@ -117,35 +141,8 @@ class AuthController extends Controller
         }
     }
 
+
     /**
-     * Reset the user's password.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     */
-    public function resetPassword(Request $request)
-    {
-        dd(Auth::user());
-        $validations = Validator::make($request->all(), [
-            'password' => ['required', 'min:8'],
-            'new_password' => ['required', 'min:8'],
-            'confirm_password' => "required|same:new_password",
-        ]);
-
-        if ($validations->fails()) {
-            return $this->apiResponse(400, 'validation error', $validations->errors());
-        }
-
-        if (User::where(['email' => $request->user()->email])->first() && Hash::check($request->password, $request->user()->password)) {
-            // if ($credentials) {
-            # code...
-            $user = User::where('id', auth()->user()->id)->first();
-            $user->update(['password' => Hash::make($request->confirm_password)]);
-            return $this->apiResponse(1, 'Successfully', ['user' => $user]);
-        }
-        return $this->apiResponse(200, 'Successfully');
-    }
-
-        /**
      * Refresh the user's access token.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -157,8 +154,7 @@ class AuthController extends Controller
         ]);
 
         $token = $request->user()->refreshToken();
-
-        return response()->json(['token' => $token], 200);
+        return $this->apiResponse(200, 'Successfully', null,$token);
     }
 
 }
