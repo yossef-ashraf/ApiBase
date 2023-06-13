@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\EX\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Ex;
+use App\Models\User;
 
 use App\Http\Traits\ImageTrait;
 use App\Http\Controllers\Controller;
@@ -17,79 +17,79 @@ class ExTrashedController extends Controller
 
     public function show()
     {
-     $Ex= EX::get();
-     return $this->apiResponse(200,"done",null,$Ex);
+     $User= User::get();
+     return $this->apiResponse(200,"done",null,$User);
     }
     public function showAll()
     {
-        $Ex=  EX::withTrashed()->get();
-        return $this->apiResponse(200,"done",null,$Ex);
+        $User=  User::withTrashed()->get();
+        return $this->apiResponse(200,"done",null,$User);
     }
     public function showTrashed()
     {
-        $Ex= EX::onlyTrashed()->get();
-        return $this->apiResponse(200,"done",null,$Ex);
+        $User= User::onlyTrashed()->get();
+        return $this->apiResponse(200,"done",null,$User);
     }
     public function showOne(Request $request)
     {
         $validator = Validator::make($request->all(), [
-        'id' => 'required|exists:Exs,id',
+        'id' => 'required|Userists:Users,id',
         ]);
         if ($validator->fails()) {
         return $this->apiResponse(400, 'validation error', $validator->errors());
         }
         // قم بتطبيق قواعد التحقق هنا إن لزم الأمر
-        $Ex = Ex::withTrashed()->findOrFail($request->id);
-        return $this->apiResponse(200,"done",null,$Ex);
+        $User = User::withTrashed()->findOrFail($request->id);
+        return $this->apiResponse(200,"done",null,$User);
     }
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:Exs,id',
+            'id' => 'required|Userists:Users,id',
             ]);
         if ($validator->fails()) {
         return $this->apiResponse(400, 'validation error', $validator->errors());
         }
         // قم بتطبيق قواعد التحقق هنا إن لزم الأمر
-        $Ex = Ex::withTrashed()->findOrFail($request->id);
-        return $this->apiResponse(200,"done",null,$Ex);
+        $User = User::withTrashed()->findOrFail($request->id);
+        return $this->apiResponse(200,"done",null,$User);
     }
     public function destroy(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:Exs,id',
+            'id' => 'required|Userists:Users,id',
             ]);
         if ($validator->fails()) {
         return $this->apiResponse(400, 'validation error', $validator->errors());
         }
-        $Ex = Ex::findOrFail($request->id);
-        $Ex->delete();
-        return $this->apiResponse(200,"done",null,$Ex);
+        $User = User::findOrFail($request->id);
+        $User->delete();
+        return $this->apiResponse(200,"done",null,$User);
 
     }
     public function restore(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:Exs,id',
+            'id' => 'required|Userists:Users,id',
             ]);
         if ($validator->fails()) {
         return $this->apiResponse(400, 'validation error', $validator->errors());
         }
-        $Ex = EX::onlyTrashed()->findOrFail($request->id);
-        $Ex->restore();
-        return $this->apiResponse(200,"done",null,$Ex);
+        $User = User::onlyTrashed()->findOrFail($request->id);
+        $User->restore();
+        return $this->apiResponse(200,"done",null,$User);
     }
     public function forceDelete(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:Exs,id',
+            'id' => 'required|Userists:Users,id',
             ]);
         if ($validator->fails()) {
         return $this->apiResponse(400, 'validation error', $validator->errors());
         }
-        $Ex = Ex::onlyTrashed()->findOrFail($request->id);
-        $Ex->forceDelete();
-        return $this->apiResponse(200,"done",null,$Ex);
+        $User = User::onlyTrashed()->findOrFail($request->id);
+        $User->forceDelete();
+        return $this->apiResponse(200,"done",null,$User);
     }
 
 }
